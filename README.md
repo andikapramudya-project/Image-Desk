@@ -27,7 +27,11 @@ Image Desk memproses banyak gambar sekaligus langsung di browser. Gambar digamba
 - **Kompresi dengan slider kualitas** (10–100%) beserta pratinjau estimasi ukuran.
 - **Ubah ukuran** berdasarkan lebar dan tinggi maksimum, dengan rasio asli dipertahankan dan tanpa memperbesar gambar.
 - **Watermark teks** dengan pilihan posisi (empat sudut atau tengah) dan transparansi.
-- **Pemrosesan batch** dengan daftar gambar, pengaturan kualitas per gambar, dan unduhan satuan atau sekaligus.
+- **Preset sekali klik** untuk Instagram, WhatsApp, web, thumbnail, dan email.
+- **Target ukuran file** (mis. maks 200 KB): kualitas dicari otomatis untuk JPG dan WebP.
+- **Pemrosesan batch** dengan daftar gambar, pengaturan kualitas per gambar, hapus per gambar, dan ringkasan total penghematan.
+- **Unduh semua sebagai ZIP** tanpa library tambahan, atau unduh satu per satu.
+- **Perbandingan sebelum/sesudah** dengan slider geser.
 - **Seret dan lepas** berkas ke area unggah.
 - **Tema terang dan gelap.**
 

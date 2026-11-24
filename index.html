@@ -51,6 +51,18 @@
           </div>
 
           <div class="control-group">
+            <label for="presetSelect">Preset</label>
+            <select id="presetSelect">
+              <option value="custom">Kustom</option>
+              <option value="instagram">Instagram (1080 px, JPG)</option>
+              <option value="whatsapp">WhatsApp (1600 px, JPG ringan)</option>
+              <option value="web">Web hero (1920 px, WebP)</option>
+              <option value="thumbnail">Thumbnail (400 px, WebP)</option>
+              <option value="email">Email ringan (1280 px, JPG)</option>
+            </select>
+          </div>
+
+          <div class="control-group">
             <label for="formatSelect">Format output</label>
             <select id="formatSelect">
               <option value="image/jpeg">JPG</option>
@@ -65,6 +77,19 @@
               <span id="qualityValue">82%</span>
             </div>
             <input id="qualityRange" type="range" min="10" max="100" value="82" />
+          </div>
+
+          <div class="switch-row">
+            <div>
+              <label for="targetToggle">Target ukuran file</label>
+              <p id="targetHint">Kualitas dicari otomatis agar file tidak melebihi batas.</p>
+            </div>
+            <input id="targetToggle" type="checkbox" />
+          </div>
+
+          <div class="control-group" id="targetControls" hidden>
+            <label for="targetInput">Ukuran maks (KB)</label>
+            <input id="targetInput" type="number" min="10" step="10" value="200" />
           </div>
 
           <div class="quality-preview" id="qualityPreview" hidden>
@@ -168,11 +193,13 @@
             </div>
           </div>
 
+          <p class="batch-summary" id="batchSummary" role="status" hidden></p>
+
           <div class="image-list-header">
             <h2>Daftar gambar</h2>
             <div class="list-actions">
               <button class="ghost-button" id="downloadAllButton" type="button" disabled>
-                Unduh semua
+                Unduh semua (ZIP)
               </button>
               <button class="ghost-button" id="clearButton" type="button" disabled>Bersihkan</button>
             </div>
@@ -188,6 +215,28 @@
       </section>
     </main>
 
+    <dialog class="compare-dialog" id="compareDialog" aria-labelledby="compareTitle">
+      <div class="compare-header">
+        <div>
+          <h2 id="compareTitle">Sebelum dan sesudah</h2>
+          <p id="compareInfo"></p>
+        </div>
+        <button class="icon-button" id="compareClose" type="button" title="Tutup">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+          <span class="sr-only">Tutup perbandingan</span>
+        </button>
+      </div>
+      <div class="compare-stage" id="compareStage">
+        <img id="compareAfter" alt="Hasil" />
+        <img id="compareBefore" alt="Asli" />
+        <span class="compare-tag is-before">Asli</span>
+        <span class="compare-tag is-after">Hasil</span>
+        <span class="compare-handle" aria-hidden="true"></span>
+      </div>
+      <label class="sr-only" for="compareRange">Geser pembatas sebelum dan sesudah</label>
+      <input id="compareRange" type="range" min="0" max="100" value="50" />
+    </dialog>
+
     <template id="imageItemTemplate">
       <article class="image-item">
         <img alt="" />
@@ -197,7 +246,14 @@
           <span class="quality-chip"></span>
           <div class="result-line"></div>
         </div>
-        <a class="download-button" hidden>Unduh</a>
+        <div class="item-actions">
+          <button class="ghost-button compare-button" type="button" hidden>Bandingkan</button>
+          <a class="download-button" hidden>Unduh</a>
+          <button class="icon-button remove-button" type="button" title="Hapus gambar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+            <span class="sr-only">Hapus gambar</span>
+          </button>
+        </div>
       </article>
     </template>
 
