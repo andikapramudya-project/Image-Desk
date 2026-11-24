@@ -8,14 +8,27 @@
       content="Image processor sederhana untuk compress, resize, convert format, dan watermark batch."
     />
     <title>Image Desk - Processor & Resizer</title>
+    <script>
+      // Terapkan tema sebelum halaman digambar agar tidak berkedip.
+      (function () {
+        var theme = "light";
+        try {
+          theme =
+            localStorage.getItem("imageDeskTheme") ||
+            (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+        } catch (error) {}
+        document.documentElement.dataset.theme = theme === "dark" ? "dark" : "light";
+      })();
+    </script>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
+    <div class="ambient" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
     <main class="app-shell">
       <header class="topbar">
         <div>
-          <p class="eyebrow">Image Desk</p>
-          <h1>Image Studio</h1>
+          <p class="eyebrow">Pemroses gambar di browser</p>
+          <h1>Image Desk</h1>
         </div>
         <div class="top-actions">
           <button class="theme-button" id="themeButton" type="button" title="Ganti tema">
@@ -32,7 +45,7 @@
           <div class="panel-header">
             <h2>Pengaturan</h2>
             <button class="icon-button" id="resetButton" type="button" title="Reset pengaturan">
-              <span aria-hidden="true">R</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
               <span class="sr-only">Reset pengaturan</span>
             </button>
           </div>

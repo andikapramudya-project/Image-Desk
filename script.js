@@ -7,6 +7,7 @@ const state = {
   estimateUrl: "",
   selectedKey: "",
   qualityByFile: new Map(),
+  renderedKeys: new Set(),
 };
 
 const defaults = {
@@ -122,6 +123,7 @@ function clearFiles() {
   state.results.clear();
   state.selectedKey = "";
   state.qualityByFile.clear();
+  state.renderedKeys.clear();
   clearEstimate();
   elements.progressCard.hidden = true;
   renderImageList();
@@ -144,6 +146,8 @@ function renderImageList() {
     return;
   }
 
+  let newCount = 0;
+
   state.files.forEach((file, index) => {
     const fragment = elements.imageTemplate.content.cloneNode(true);
     const item = fragment.querySelector(".image-item");
@@ -162,6 +166,11 @@ function renderImageList() {
     item.setAttribute("role", "button");
     item.setAttribute("aria-label", `Pilih ${file.name}`);
     item.classList.toggle("is-selected", fileKey === state.selectedKey);
+    if (!state.renderedKeys.has(fileKey)) {
+      item.classList.add("is-new");
+      item.style.setProperty("--stagger", Math.min(newCount, 8));
+      newCount += 1;
+    }
     item.addEventListener("click", () => selectFile(fileKey));
     item.addEventListener("keydown", (event) => {
       if (event.key === "Enter" || event.key === " ") {
@@ -194,6 +203,8 @@ function renderImageList() {
 
     elements.imageList.appendChild(fragment);
   });
+
+  state.renderedKeys = new Set(state.files.map(getFileKey));
 }
 
 async function processAllImages() {
@@ -397,7 +408,16 @@ function resetControls() {
   updateControlState();
 }
 
+function updateRangeFill(range) {
+  const min = Number(range.min) || 0;
+  const max = Number(range.max) || 100;
+  const percent = ((Number(range.value) - min) / (max - min)) * 100;
+  range.style.setProperty("--fill", `${percent}%`);
+}
+
 function updateControlState() {
+  updateRangeFill(elements.qualityRange);
+  updateRangeFill(elements.watermarkOpacity);
   elements.qualityValue.textContent = `${elements.qualityRange.value}%`;
   elements.opacityValue.textContent = `${elements.watermarkOpacity.value}%`;
   elements.sizeControls.style.display = elements.resizeToggle.checked ? "grid" : "none";
@@ -419,6 +439,7 @@ function syncQualityControl() {
 
   elements.qualityRange.value = getQualityForFile(selectedFile);
   elements.qualityValue.textContent = `${elements.qualityRange.value}%`;
+  updateRangeFill(elements.qualityRange);
 }
 
 function updateSelectedQuality() {
@@ -431,7 +452,12 @@ function updateSelectedQuality() {
 }
 
 function applySavedTheme() {
-  const savedTheme = localStorage.getItem("imageDeskTheme");
+  let savedTheme = null;
+  try {
+    savedTheme = localStorage.getItem("imageDeskTheme");
+  } catch (error) {
+    savedTheme = null;
+  }
   const prefersDark = window.matchMedia?.("(prefers-color-scheme: dark)").matches;
   const theme = savedTheme || (prefersDark ? "dark" : "light");
 
@@ -441,7 +467,11 @@ function applySavedTheme() {
 function toggleTheme() {
   const nextTheme = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
   setTheme(nextTheme);
-  localStorage.setItem("imageDeskTheme", nextTheme);
+  try {
+    localStorage.setItem("imageDeskTheme", nextTheme);
+  } catch (error) {
+    // Penyimpanan tidak tersedia (mode privasi); tema tetap berlaku untuk sesi ini.
+  }
 }
 
 function setTheme(theme) {
